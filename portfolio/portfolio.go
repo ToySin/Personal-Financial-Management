@@ -29,6 +29,7 @@ type Transaction struct {
 }
 
 // Portfolio is a collection of monthly financial transactions.
+// It should be created with NewPortfolio().
 type Portfolio struct {
 	Month        time.Time                  // a month of the portfolio
 	Transactions map[Category][]Transaction // a list of buckets
@@ -39,7 +40,11 @@ type Portfolio struct {
 // The day, hour, minute, second, and nsecond of the time is ignored.
 func NewPortfolio(month time.Time) *Portfolio {
 	month = month.AddDate(0, 0, -month.Day()+1)
-	return &Portfolio{Month: month}
+	return &Portfolio{
+		Month:        month,
+		Transactions: map[Category][]Transaction{},
+		Balance:      0,
+	}
 }
 
 // TotalAmount returns the total amount of the given category.
@@ -57,12 +62,16 @@ func (p *Portfolio) TotalAmount(c Category) Amount {
 // The day of the transaction is only required.
 // The year and month of the transaction are set to the year and month of the portfolio.
 func (p *Portfolio) AddTransaction(c Category, transaction *Transaction) {
-	categoryList := p.Transactions[c]
-	if categoryList == nil {
-		categoryList = make([]Transaction, 0)
+	if p.Transactions[c] == nil {
+		p.Transactions[c] = make([]Transaction, 0)
 	}
+	categoryList := p.Transactions[c]
 
-	transaction.Date = p.Month.AddDate(0, 0, transaction.Date.Day()-1)
+	transaction.Date = time.Date(
+		p.Month.Year(),
+		p.Month.Month(),
+		transaction.Date.Day(),
+		0, 0, 0, 0, time.Local)
 	transaction.Category = c
 	categoryList = append(categoryList, *transaction)
 	p.Transactions[c] = categoryList

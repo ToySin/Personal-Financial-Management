@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	dateFormat = "1999-12-03"
+	dateFormat = "2006-01-02"
 )
 
 type Writer interface {
