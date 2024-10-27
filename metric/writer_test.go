@@ -5,6 +5,8 @@ import (
 	_ "embed"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/ToySin/finance/portfolio"
 )
 
@@ -17,7 +19,5 @@ func TestWritePortfolio(t *testing.T) {
 	buffer := new(bytes.Buffer)
 	writePortfolio(buffer, *p)
 
-	if buffer.String() != testfile {
-		t.Errorf("writePortfolio() = %v, want %v", buffer.String(), testfile)
-	}
+	assert.Equal(t, testfile, buffer.String())
 }
