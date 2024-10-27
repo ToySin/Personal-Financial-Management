@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Amount float64
+type Amount int64
 
 type Category string
 
