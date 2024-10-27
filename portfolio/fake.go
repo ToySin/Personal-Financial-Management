@@ -14,7 +14,7 @@ func GetTestPortfolio() *Portfolio {
 				{
 					Date:     utils.GetLastBusinessDay(2024, 10),
 					Name:     string(utils.Salary),
-					Amount:   3990000,
+					Amount:   5000000,
 					Category: IncomeCategory,
 				},
 			},
@@ -22,7 +22,7 @@ func GetTestPortfolio() *Portfolio {
 				{
 					Date:     time.Date(2024, 10, 8, 0, 0, 0, 0, time.Local),
 					Name:     string(utils.MonthlyRent),
-					Amount:   150000,
+					Amount:   500000,
 					Category: FixedExpenseCategory,
 				},
 				{
@@ -34,25 +34,25 @@ func GetTestPortfolio() *Portfolio {
 				{
 					Date:     time.Date(2024, 10, 15, 0, 0, 0, 0, time.Local),
 					Name:     string(utils.EducationLoan),
-					Amount:   150000,
+					Amount:   300000,
 					Category: FixedExpenseCategory,
 				},
 				{
 					Date:     time.Date(2024, 10, 10, 0, 0, 0, 0, time.Local),
 					Name:     string(utils.Insurance),
-					Amount:   170000,
+					Amount:   200000,
 					Category: FixedExpenseCategory,
 				},
 				{
 					Date:     time.Date(2024, 10, 27, 0, 0, 0, 0, time.Local),
 					Name:     string(utils.PhoneBill),
-					Amount:   17000,
+					Amount:   30000,
 					Category: FixedExpenseCategory,
 				},
 				{
 					Date:     time.Date(2024, 10, 15, 0, 0, 0, 0, time.Local),
 					Name:     string(utils.InternetBill),
-					Amount:   22500,
+					Amount:   30000,
 					Category: FixedExpenseCategory,
 				},
 			},
@@ -66,7 +66,7 @@ func GetTestPortfolio() *Portfolio {
 				{
 					Date:     time.Date(2024, 10, 15, 0, 0, 0, 0, time.Local),
 					Name:     string(utils.YouthHouseSaving),
-					Amount:   50000,
+					Amount:   100000,
 					Category: SavingCategory,
 				},
 			},
