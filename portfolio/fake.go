@@ -6,6 +6,9 @@ import (
 	"github.com/ToySin/finance/utils"
 )
 
+// GetTestPortfolio returns a test portfolio for the unit test.
+// If you doesn't have a specific reason to change the test data,
+// DON'T MODIFY IT.
 func GetTestPortfolio() *Portfolio {
 	return &Portfolio{
 		Month: time.Date(2024, 10, 1, 0, 0, 0, 0, time.Local),

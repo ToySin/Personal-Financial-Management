@@ -1,5 +1,7 @@
 package utils
 
+// TransactionName represents the name of a common transaction.
+// This is not used in the current implementation.
 type TransactionName string
 
 const (

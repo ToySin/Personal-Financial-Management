@@ -4,8 +4,7 @@ import (
 	"time"
 )
 
-// TODO: Get the holiday list from the government API
-
+// TODO(#3): Get the holiday list from the government API
 // Holiday list of 2024 in Korea
 var holidays = map[string]struct{}{
 	"2024-01-01": {}, // 새해

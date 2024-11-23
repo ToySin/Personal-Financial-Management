@@ -5,8 +5,10 @@ import (
 	"time"
 )
 
+// Ammount is a type for the amount of money.
 type Amount int64
 
+// Category is a type for the category of the transaction.
 type Category string
 
 const (
@@ -20,28 +22,30 @@ const (
 )
 
 // Transaction is a financial transaction.
+// It represents a single income or expense item.
 type Transaction struct {
 	Date     time.Time // date of the transaction
-	Name     string    // name of the item
-	Category Category  // category of the item
-	Amount   Amount    // amount of the item
-	Note     string    // note of the item
+	Name     string    // name of the transaction
+	Category Category  // category of the transaction
+	Amount   Amount    // amount of the transaction
+	Note     string    // note of the transaction
 }
 
 // Portfolio is a collection of monthly financial transactions.
 // It should be created with NewPortfolio().
 type Portfolio struct {
-	Month        time.Time                  // a month of the portfolio
-	Transactions map[Category][]Transaction // a list of buckets
+	Month        time.Time                  // a year and month of the portfolio
+	Transactions map[Category][]Transaction // a list of transactions
 	Balance      Amount                     // total balance of the month
 }
 
 // NewPortfolio creates a new portfolio for the given year-month.
 // The day, hour, minute, second, and nsecond of the time is ignored.
-func NewPortfolio(month time.Time) *Portfolio {
-	month = month.AddDate(0, 0, -month.Day()+1)
+func NewPortfolio(yearAndMonth time.Time) *Portfolio {
+	// Set the day to the first day of the month
+	yearAndMonth = yearAndMonth.AddDate(0, 0, -yearAndMonth.Day()+1)
 	return &Portfolio{
-		Month:        month,
+		Month:        yearAndMonth,
 		Transactions: map[Category][]Transaction{},
 		Balance:      0,
 	}
