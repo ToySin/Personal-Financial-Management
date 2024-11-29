@@ -17,7 +17,7 @@ func TestWritePortfolio(t *testing.T) {
 	p := portfolio.GetTestPortfolio()
 
 	buffer := new(bytes.Buffer)
-	writePortfolio(buffer, *p)
+	WritePortfolio(buffer, *p)
 
 	assert.Equal(t, testfile, buffer.String())
 }

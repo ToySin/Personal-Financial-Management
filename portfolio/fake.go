@@ -6,10 +6,13 @@ import (
 	"github.com/ToySin/finance/utils"
 )
 
+// GetTestPortfolio returns a test portfolio for the unit test.
+// If you doesn't have a specific reason to change the test data,
+// DON'T MODIFY IT.
 func GetTestPortfolio() *Portfolio {
 	return &Portfolio{
 		Month: time.Date(2024, 10, 1, 0, 0, 0, 0, time.Local),
-		Transactions: map[Category][]Transaction{
+		Transactions: map[Category][]*Transaction{
 			IncomeCategory: {
 				{
 					Date:     utils.GetLastBusinessDay(2024, 10),
