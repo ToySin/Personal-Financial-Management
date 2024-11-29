@@ -22,6 +22,11 @@ type Config struct {
 	FinanceDBPass string `envconfig:"FINANCE_DB_PASS" default:""`
 	FinanceDBName string `envconfig:"FINANCE_DB_NAME" default:"finance"`
 }
+
+type config struct {
+	Port        int    `env:"PORT" envDefault:"8080"`
+	PlatformEnv string `env:"PLATFORM_ENV" envDefault:"local"`
+}
 ```
 
 ```javascript
