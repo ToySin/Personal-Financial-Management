@@ -10,48 +10,41 @@ import (
 )
 
 type fakePortfolioStorage struct {
-	portfolio *portfolio.Portfolio
-}
-
-func (s *fakePortfolioStorage) SavePortfolio(p *portfolio.Portfolio) error {
-	s.portfolio = p
-	return nil
+	transactions []*portfolio.Transaction
 }
 
 func (s *fakePortfolioStorage) GetPortfolio(date time.Time) (*portfolio.Portfolio, error) {
-	if s.portfolio == nil {
-		return nil, portfolio.ErrPortfolioNotFound
+	p := &portfolio.Portfolio{
+		Month:        date,
+		Transactions: make(map[portfolio.Category][]*portfolio.Transaction),
 	}
-	return s.portfolio, nil
+	for _, t := range s.transactions {
+		if t.Date.Year() == date.Year() && t.Date.Month() == date.Month() {
+			p.Transactions[t.Category] = append(p.Transactions[t.Category], t)
+		}
+	}
+	return p, nil
+}
+
+func (s *fakePortfolioStorage) SaveTransaction(transaction *portfolio.Transaction) error {
+	s.transactions = append(s.transactions, transaction)
+	return nil
 }
 
 func TestService_CreatePortfolio(t *testing.T) {
-	s := New()
-	s.storage = &fakePortfolioStorage{}
+	s := New(&fakePortfolioStorage{})
 
 	// Create a new portfolio for the given date.
 	date := time.Date(2024, 10, 1, 0, 0, 0, 0, time.Local)
-	err := s.CreatePortfolio(date)
-	assert.NoError(t, err)
-
-	// Check if the portfolio is created correctly.
-	p, err := s.storage.GetPortfolio(date)
-	assert.NoError(t, err)
-	assert.NotNil(t, p)
-	assert.Equal(t, date.Year(), p.Month.Year())
-	assert.Equal(t, date.Month(), p.Month.Month())
-
 	s.CreateTransaction(date.AddDate(0, 0, 1), portfolio.FixedExpenseCategory, "test", 1000, "test")
-	s.CreateTransaction(date.AddDate(0, 0, 1), portfolio.VariableExpenseCategory, "test", 2000, "test")
-
-	nextMonth := date.AddDate(0, 1, 0)
-	err = s.CreatePortfolio(nextMonth)
-	assert.NoError(t, err)
+	s.CreateTransaction(date.AddDate(0, 0, 2), portfolio.VariableExpenseCategory, "test", 2000, "test")
 
 	// Check if the last month's fixed expenses are copied to the new portfolio.
-	p, err = s.storage.GetPortfolio(nextMonth)
+	p, err := s.GetPortfolio(date)
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
 	assert.Equal(t, 1, len(p.Transactions[portfolio.FixedExpenseCategory]))
-	assert.Equal(t, 0, len(p.Transactions[portfolio.VariableExpenseCategory]))
+	assert.Equal(t, 1, len(p.Transactions[portfolio.VariableExpenseCategory]))
+	assert.Equal(t, "test", p.Transactions[portfolio.FixedExpenseCategory][0].Name)
+	assert.Equal(t, "test", p.Transactions[portfolio.VariableExpenseCategory][0].Name)
 }

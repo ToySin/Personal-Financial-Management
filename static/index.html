@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Management</title>
+  <style>
+    #spending-form, #portfolio-form {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Finance Management</h1>
+
+  <button id="register-spending-btn">Register Spending</button>
+  <button id="portfolio-view-btn">View Portfolio</button>
+
+  <div id="spending-form">
+    <h2>Register Spending</h2>
+    <form id="spending-form-element">
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date"><br><br>
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required><br><br>
+
+      <label for="category">Category:</label>
+      <select id="category" name="category">
+        <option value="CATEGORY_INCOME">Income</option>
+        <option value="CATEGORY_FIXED_EXPENSE">Fixed Expense</option>
+        <option value="CATEGORY_VARIABLE_EXPENSE">Variable Expense</option>
+        <option value="CATEGORY_SAVING">Saving</option>
+        <option value="CATEGORY_INVESTMENT">Investment</option>
+        <option value="CATEGORY_INVESTMENT_INCOME">Investment Income</option>
+      </select><br><br>
+
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" required><br><br>
+
+      <label for="note">Note:</label>
+      <textarea id="note" name="note"></textarea><br><br>
+
+      <button type="submit">Save</button>
+    </form>
+  </div>
+
+  <div id="portfolio-form">
+    <h2>View Portfolio</h2>
+    <form id="portfolio-form-element">
+      <label for="portfolio-date">Month:</label>
+      <input type="month" id="portfolio-date" name="portfolio-date"><br><br>
+
+      <button type="submit">Fetch Portfolio</button>
+    </form>
+    <pre id="portfolio-result"></pre>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

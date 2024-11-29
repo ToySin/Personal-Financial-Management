@@ -12,7 +12,7 @@ import (
 func GetTestPortfolio() *Portfolio {
 	return &Portfolio{
 		Month: time.Date(2024, 10, 1, 0, 0, 0, 0, time.Local),
-		Transactions: map[Category][]Transaction{
+		Transactions: map[Category][]*Transaction{
 			IncomeCategory: {
 				{
 					Date:     utils.GetLastBusinessDay(2024, 10),
