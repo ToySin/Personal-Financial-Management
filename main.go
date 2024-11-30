@@ -53,13 +53,7 @@ func main() {
 		storageCfg.FinanceDBUser = "toy"
 		storageCfg.FinanceDBPass = "sin"
 	}
-
-	db, err := storageCfg.CreateDB()
-	if err != nil {
-		slog.Error("failed to create a database connection", "reason", err)
-		return
-	}
-	client, err := storage.NewSQLClient(db)
+	client, err := storage.NewSQLClient(storageCfg)
 	if err != nil {
 		slog.Error("failed to create a storage client", "reason", err)
 		return

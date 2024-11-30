@@ -6,6 +6,7 @@ import (
 	"time"
 
 	env "github.com/caarlos0/env/v11"
+	"gorm.io/driver/mariadb"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -14,8 +15,14 @@ import (
 	"github.com/ToySin/finance/utils"
 )
 
+const (
+	DBTypeMySQL   = "mysql"
+	DBTypeMariaDB = "mariadb"
+)
+
 // Config represents the configuration for the database connection
 type Config struct {
+	DBType        string `envconfig:"DB_TYPE" envDefault:"mysql"`
 	FinanceDBHost string `envconfig:"FINANCE_DB_HOST" envDefault:"localhost"`
 	FinanceDBPort string `envconfig:"FINANCE_DB_PORT" envDefault:"5432"`
 	FinanceDBUser string `envconfig:"FINANCE_DB_USER" envDefault:""`
@@ -33,14 +40,20 @@ func CreateConfigFromEnv() (*Config, error) {
 }
 
 // CreateDB creates a new database connection.
-func (c *Config) CreateDB() (*sql.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8mb4&loc=Local",
-		c.FinanceDBUser,
-		c.FinanceDBPass,
-		c.FinanceDBHost,
-		c.FinanceDBPort,
-		c.FinanceDBName)
-	return sql.Open("mysql", dsn)
+func (c *Config) createDB() (*sql.DB, error) {
+	var dsn string
+	switch c.DBType {
+	case DBTypeMySQL, DBTypeMariaDB:
+		dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8mb4&loc=Local",
+			c.FinanceDBUser,
+			c.FinanceDBPass,
+			c.FinanceDBHost,
+			c.FinanceDBPort,
+			c.FinanceDBName)
+	default:
+		return nil, fmt.Errorf("unsupported database type: %s", c.DBType)
+	}
+	return sql.Open(c.DBType, dsn)
 }
 
 // SQLClient is a database client for the finance service.
@@ -49,8 +62,22 @@ type SQLClient struct {
 }
 
 // NewSQLClient creates a new SQLClient.
-func NewSQLClient(db *sql.DB) (*SQLClient, error) {
-	gdb, err := gorm.Open(mysql.New(mysql.Config{Conn: db}), &gorm.Config{})
+func NewSQLClient(cfg *Config) (*SQLClient, error) {
+	var err error
+	db, err := cfg.createDB()
+	if err != nil {
+		return nil, err
+	}
+
+	var gdb *gorm.DB
+	switch cfg.DBType {
+	case DBTypeMySQL:
+		gdb, err = gorm.Open(mysql.New(mysql.Config{Conn: db}), &gorm.Config{})
+	case DBTypeMariaDB:
+		gdb, err = gorm.Open(mariadb.New(mariadb.Config{Conn: db}), &gorm.Config{})
+	default:
+		return nil, fmt.Errorf("unsupported database type: %s", cfg.DBType)
+	}
 	if err != nil {
 		return nil, err
 	}

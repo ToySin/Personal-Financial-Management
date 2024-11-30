@@ -72,10 +72,7 @@ func TestSavePortfolio(t *testing.T) {
 		FinanceDBPass: dbPass,
 		FinanceDBName: dbName,
 	}
-	db, err := config.CreateDB()
-	assert.NoError(t, err)
-
-	client, err := NewSQLClient(db)
+	client, err := NewSQLClient(config)
 	assert.NoError(t, err)
 
 	// Save the portfolio to the database.
@@ -125,10 +122,7 @@ func TestSaveTransaction(t *testing.T) {
 		FinanceDBPass: dbPass,
 		FinanceDBName: dbName,
 	}
-	db, err := config.CreateDB()
-	assert.NoError(t, err)
-
-	client, err := NewSQLClient(db)
+	client, err := NewSQLClient(config)
 	assert.NoError(t, err)
 
 	// Save the transaction to the database.
